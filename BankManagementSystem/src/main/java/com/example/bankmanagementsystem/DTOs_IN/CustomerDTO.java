@@ -28,8 +28,9 @@ public class CustomerDTO {
     @NotEmpty(message = "email is mandatory")
     private String email;
 
+    private String role;
+
     @NotEmpty(message = "phone Number is mandatory")
     @Pattern(regexp = "^05[0-9]{8}$", message = "Phone number must start with '05' and be 10 digits long.")
-    @Column(unique = true, nullable = false)
     private String phoneNumber;
 }

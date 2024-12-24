@@ -30,6 +30,8 @@ public class Account {
 
     private boolean isActive =false;
 
+    private boolean block =false;
+
     @ManyToOne
     private Customer customer;
 

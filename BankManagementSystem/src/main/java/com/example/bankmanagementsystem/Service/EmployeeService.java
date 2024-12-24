@@ -92,8 +92,8 @@ public class EmployeeService {
     }
 
   public void deleteEmployee(MyUser myUser) {
-      if (!myUser.getRole().equals("ADMIN") && !myUser.getRole().equals("EMPLOYEE")) {
-          throw new ApiException("You do not have permission to update this employee.");
+      if (!"ADMIN".equals(myUser.getRole()) && !"EMPLOYEE".equals(myUser.getRole())) {
+          throw new ApiException("You do not have permission to delete this employee.");
       }
 
       Employee emp = employeeRepository.findEmployeeById(myUser.getId());
@@ -101,9 +101,10 @@ public class EmployeeService {
           throw new ApiException("Employee not found");
       }
       MyUser user = authRepository.findMyUserById(emp.getMyuser().getId());
-      emp.setMyuser(null);
+
      
       employeeRepository.delete(emp);
+      emp.setMyuser(null);
     }
 
 }

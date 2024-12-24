@@ -28,7 +28,6 @@ public class ConfigurationSecurity {
         return authProvider;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -37,11 +36,17 @@ public class ConfigurationSecurity {
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET,"api/v1/employee/getAllEmployees","api/v1/employee/getEmployeeById/").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/user/register","api/v1/employee/registerEmployee").permitAll()
-                .requestMatchers(HttpMethod.PUT,"api/v1/employee/update-employee").hasAnyRole("EMPLOYEE", "ADMIN")
-                .requestMatchers(HttpMethod.DELETE,"api/v1/employee/update-employee").hasAnyRole("EMPLOYEE","ADMIN")
-
+                .requestMatchers( "/api/v1/employee/getAllEmployees", "/api/v1/employee/getEmployeeById/").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/account/getAllAccounts","/api/v1/account/ActiveAccount/t").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.POST,"/api/v1/user/register", "/api/v1/employee/registerEmployee","/api/v1/customer/registerCustomer").permitAll()
+                .requestMatchers(HttpMethod.POST,"/api/v1/account/createAccount").hasAnyRole("CUSTOMER")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/account/updateAccount").hasAnyRole("CUSTOMER")
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/account/deleteAccount").hasAnyRole("CUSTOMER")
+                .requestMatchers(HttpMethod.GET,"/api/v1/account/getCustomerAccount","api/v1/account/deposit/","api/v1/account/Withdraw/","api/v1/account/transferFunds/","api/v1/account/BlockAccount/").hasAnyRole("CUSTOMER")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/employee/update-employee").hasAnyRole("EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/employee/delete-employee").hasAnyRole("EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/customer/update-Customer").hasAnyRole("CUSTOMER","EMPLOYEE" ,"ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/customer/delete-customer").hasAnyRole("CUSTOMER","EMPLOYEE" ,"ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .logout()
@@ -50,6 +55,7 @@ public class ConfigurationSecurity {
                 .invalidateHttpSession(true)
                 .and()
                 .httpBasic();
+
         return http.build();
     }
 }
