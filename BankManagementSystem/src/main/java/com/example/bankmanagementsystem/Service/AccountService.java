@@ -142,6 +142,9 @@ public class AccountService {
         if (!"CUSTOMER".equals(user.getRole())) {
             throw new ApiException("You do not have permission.");
         }
+         if (!account.isActive()){
+            throw new ApiException("Account is not ِِActive.");
+        }
 
         Account account = accountRepository.findAccountsById(user.getId());
         if (account == null) {
@@ -172,6 +175,9 @@ public class AccountService {
         if (account == null) {
             throw new ApiException("No account found for the given customer.");
         }
+         if (!account.isActive()){
+            throw new ApiException("Account is not ِِActive.");
+        }
         if (account.isBlock()){
             throw new ApiException("Account is not blocked.");
         }
@@ -201,6 +207,9 @@ public class AccountService {
         Account senderAccount = accountRepository.findAccountsById(sender.getId());
         if (senderAccount == null) {
             throw new ApiException("Sender account not found.");
+        }
+         if (!account.isActive()){
+            throw new ApiException("Account is not ِِActive.");
         }
         if (senderAccount.isBlock()){
             throw new ApiException("senderAccount is not blocked.");
